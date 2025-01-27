@@ -1,0 +1,31 @@
+library(gt)
+
+# Question 1.
+# Inner merge
+merged_data <- inner_join(service.area.clean, plan.year, by = c("contractid", "org_type", "org_name", "ssa", "fips", "county", "state", "plan_type"))
+# Count number of occurrences of each plan type
+plan_summary <- merged_data %>%
+  group_by(plan_type) %>%
+  summarise(count = n())
+
+# Print the summary table
+print(plan_summary)
+
+# Question 2. 
+filtered_data <- merged_data %>%
+  filter(snp != "Yes",   # Exclude SNP plans
+         eghp != "Yes",  # Exclude eghp plans
+         !grepl("^800", planid))  # Exclude "800-series" plans
+# Count number of occurrences of each plan type
+plan_summary_filtered <- filtered_data %>%
+  group_by(plan_type) %>%
+  summarise(count = n())
+
+# Print the summary table
+print(plan_summary_filtered)
+
+#Question 3
+average_enrollment = merged_data %>% select("plan_type","avg_enrollment").reset_index(drop=True)
+
+# Display the resulting table
+print(average_enrollment)
