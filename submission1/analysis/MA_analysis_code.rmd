@@ -1,0 +1,65 @@
+library(gt)
+```{r}
+# Load Necessary Packages
+library(ggplot2)
+library(gridExtra)
+```
+
+```{r}
+## Question 1
+# Inner merge
+merged_data <- inner_join(service.area.clean, plan.year, by = c("contractid", "org_type", "org_name", "ssa", "fips", "county", "state", "plan_type"))
+
+# Count number of occurrences of each plan type
+plan_summary <- merged_data %>%
+  group_by(plan_type) %>%
+  summarise(count = n())
+
+# Create a table plot
+table_plot <- tableGrob(plan_summary)
+
+# Define the path where the PNG file will be saved
+output_path <- "C:/Users/hjust/OneDrive/Documents/GitHub/homework1/submission1/results/plan_summary.png"
+
+# Save the plot as a PNG
+ggsave(output_path, table_plot, width = 8, height = 6, dpi = 300)
+```
+
+```{r}
+## Question 2 
+#Filter the data
+filtered_data <- merged_data %>%
+  filter(snp != "Yes",   # Exclude SNP plans
+         eghp != "Yes",  # Exclude eghp plans
+         !grepl("^800", planid))  # Exclude "800-series" plans
+
+# Count number of occurrences of each plan type
+plan_summary_filtered <- filtered_data %>%
+  group_by(plan_type) %>%
+  summarise(count = n())
+
+# Create a table plot
+table_plot_1 <- tableGrob(plan_summary_filtered)
+
+# Define the path where the PNG file will be saved
+output_path_png <- "C:/Users/hjust/OneDrive/Documents/GitHub/homework1/submission1/results/plan_summary_filtered.png"
+
+# Save the plot as a PNG
+ggsave(output_path_png, table_plot_1, width = 8, height = 6, dpi = 300)
+```
+
+```{r}
+#Question 3
+average_enrollment <- merged_data %>%
+  select(plan_type, avg_enrollment) %>%
+  mutate(row_number = row_number())
+
+# Create a table plot
+table_plot_2 <- tableGrob(average_enrollment)
+
+# Define the path where the PNG file will be saved
+output_path_png <- "C:/Users/hjust/OneDrive/Documents/GitHub/homework1/submission1/results/average_enrollment.png"
+
+# Save the plot as a PNG
+ggsave(output_path_png, table_plot_2, width = 8, height = 6, dpi = 300)
+```
