@@ -1,0 +1,92 @@
+---
+title: "Homework 1"
+subtitle: "Research Methods, Spring 2025"
+author: Justin Hahm
+format:
+  pdf:
+    output-file: "hahm-j-hwk1-1"
+    output-ext: "pdf"
+    header-includes:
+      - \usepackage{float}
+      - \floatplacement{table}{H}
+---
+
+```{r}
+#| include: false
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, ggplot2, dplyr, lubridate, readr, readxl, hrbrthemes, fixest,
+               scales, gganimate, gapminder, gifski, png, tufte, plotly, OECD,
+               ggrepel, survey, foreign, devtools, pdftools, kableExtra, modelsummary,
+               kableExtra)
+```
+
+
+
+```{r}
+#| include: false
+#| eval: true
+ 
+load("C:/Users/hjust/OneDrive/Documents/GitHub/homework1/submission2/Hwk1_workspace.Rdata")
+```
+
+
+My answers to the homework questions are described below. Note that I do the analysis for these answers in a separate `R` script. You can read in the full data as part of your markdown file, but that takes some time to compile to pdf. So I run the analysis separately, save the workspace with only the summary stats, figures, and tables that I need, and then load the workspace in the final qmd. My analysis file is available in the analysis folder. The GitHub repository for this work is available [here](https://github.com/HJHAHM1/homework1.git). Enjoy!
+
+
+\newpage
+# Building the Data
+Answer the following based on our initial, simplified dataset of enrollments, plan types, and service areas:
+
+\noindent 1. Provide a table of the count of plans under each plan type in each year.<br>
+
+See @tbl-plans.
+
+```{r} 
+#| echo: false
+#| label: tbl-plans
+#| tbl-cap: All plan types in 2015
+
+options(knitr.kable.NA = 0)
+knitr::kable(plan.type.year1, 
+             col.names=c("Plan Type","Count"),
+             format.args=list(big.mark=","), booktabs = TRUE)
+```
+
+
+
+
+\newpage
+\noindent 2. Remove all special needs plans (SNP), employer group plans (eghp), and all "800-series" plans. Provide an updated table after making these exclusions.
+
+I remove the relevant plans just by applying the relevant filter to the full ma data and then creating the table of plan types. Counts of different plan types with these exclusions are presented in @tbl-plans2.
+
+```{r}
+#| echo: false
+#| label: tbl-plans2
+#| tbl-cap: Revised plan types in 2015
+
+options(knitr.kable.NA = 0)
+knitr::kable(plan.type.year2, 
+             col.names=c("Plan Type","Count"),
+             format.args=list(big.mark=","), booktabs = TRUE)
+``` 
+
+
+
+
+\newpage
+\noindent 3. Provide a table of the average enrollments for each plan type in 2015.
+
+To do this, I need to collapse the data to the plan-type level and form the average enrollments across all counties in which that plan type operates. The resulting table is presented in @tbl-enroll.
+
+```{r}
+#| echo: false
+#| label: tbl-enroll
+#| tbl-cap: Enrollments by plan type in 2015
+
+options(knitr.kable.NA = 0)
+knitr::kable(plan.type.enroll, digits=0,
+             col.names=c("Plan Type","Count","Avg Enrollments"),
+             format.args=list(big.mark=","), booktabs = TRUE)
+``` 
