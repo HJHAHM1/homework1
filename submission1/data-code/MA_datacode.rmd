@@ -83,8 +83,8 @@ library(tidyr)
 ## Load in service area data
     ma.path=paste0("data/input/MA_Cnty_SA_2015_01.csv")
     service.area=read_csv(ma.path,skip=1,
-                          col_names=c("contractid","org_name","org_type","plan_type","partial","eghp",
-                                      "ssa","fips","county","state","notes"),
+                          col_names=c("contractid", "org_name", "org_type", "plan_type", "partial", "eghp",
+                                      "ssa", "fips", "county", "state" ,"notes"),
                           col_types = cols(
                             contractid = col_character(),
                             org_name = col_character(),
@@ -97,7 +97,7 @@ library(tidyr)
                             county = col_character(),
                             notes = col_character()
                           ), na='*')
-      service.area.clean = service.area %>% select("contractid","org_name","org_type","plan_type","ssa","fips","county","state","notes")
+      service.area.clean = service.area %>% select("contractid", "org_name", "org_type", "plan_type", "ssa", "fips", "county", "state", "notes")
 
 write_rds(service.area.clean,paste0("data/output/sa_data_2015.rds"))
 ```

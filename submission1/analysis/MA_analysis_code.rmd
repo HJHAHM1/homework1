@@ -8,7 +8,9 @@ library(gridExtra)
 ```{r}
 ## Question 1
 # Inner merge
-merged_data <- inner_join(service.area.clean, plan.year, by = c("contractid", "org_type", "org_name", "ssa", "fips", "county", "state", "plan_type"))
+ma_data_2015 <- readRDS("C:/Users/hjust/OneDrive/Documents/GitHub/homework1/data/output/ma_data_2015.rds")
+sa_data_2015 <- readRDS("C:/Users/hjust/OneDrive/Documents/GitHub/homework1/data/output/sa_data_2015.rds")
+merged_data <- inner_join(ma_data_2015, sa_data_2015, by = c("contractid", "org_type", "org_name", "ssa", "fips", "county", "state", "plan_type"))
 
 # Count number of occurrences of each plan type
 plan_summary <- merged_data %>%
@@ -49,10 +51,10 @@ ggsave(output_path_png, table_plot_1, width = 8, height = 6, dpi = 300)
 ```
 
 ```{r}
-#Question 3
+# Group by plan_type and calculate the sum of avg_enrollment
 average_enrollment <- merged_data %>%
-  select(plan_type, avg_enrollment) %>%
-  mutate(row_number = row_number())
+  group_by(plan_type) %>%
+  summarise(avg_enrollment_1 = sum(avg_enrollment, na.rm = TRUE))
 
 # Create a table plot
 table_plot_2 <- tableGrob(average_enrollment)
@@ -60,6 +62,6 @@ table_plot_2 <- tableGrob(average_enrollment)
 # Define the path where the PNG file will be saved
 output_path_png <- "C:/Users/hjust/OneDrive/Documents/GitHub/homework1/submission1/results/average_enrollment.png"
 
-# Save the plot as a PNG
+# Use grid.draw to render the table plot and save it as a PNG
 ggsave(output_path_png, table_plot_2, width = 8, height = 6, dpi = 300)
 ```
